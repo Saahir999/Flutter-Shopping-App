@@ -72,11 +72,10 @@ class _CartState extends State<Cart> {
                                   child: ListTile(
                                     leading: Container(
                                       height: height/5,
-                                      width: height/5,
                                       child: Image(
                                         image: NetworkImage(
                                             cartmap?["${index + 1}"]["image"]),
-                                        fit: BoxFit.fill,
+                                        fit: BoxFit.fitHeight,
                                       ),
                                     ),
                                     title: Text(cartmap?["${index + 1}"]["title"]),
@@ -150,6 +149,7 @@ class _CartState extends State<Cart> {
                                     ),
                                       onTap: ()async{
                                         await perform?.database?.buy(temp);
+                                        await perform?.database?.usercart.doc(uid).delete();
                                         Navigator.pushNamed(context, "Orders");
                                       }
                                   ),

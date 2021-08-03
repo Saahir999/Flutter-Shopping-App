@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_flutter/Firebase/Authentication.dart';
 import 'package:firebase_flutter/Itemholder/Items.dart';
@@ -21,6 +20,7 @@ class _IndividualState extends State<Individual> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int dropdownValue = 1;
   double height = 600;
+  int qty = 0;
   bool absorbflag = false;
   @override
   Widget build(BuildContext context) {
@@ -43,12 +43,6 @@ class _IndividualState extends State<Individual> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer();
-            },
-          ),
           title: Text("Shop"),
           centerTitle: true,
           actions: <Widget>[
@@ -56,7 +50,7 @@ class _IndividualState extends State<Individual> {
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, 'Cart');
+                    Navigator.pushNamed(context, 'Cart').then((value){ setState((){}); });
                   },
                   child: Icon(
                     Icons.shopping_cart,
@@ -98,8 +92,8 @@ class _IndividualState extends State<Individual> {
               bool flag = false;
               if(cartproduct?["1"]!=null) {
                 cartproduct?.forEach((key, value) {
-                  if (cartproduct["${key}"]["id"] ==
-                      productmap?["${index}"]["id"]) {
+                  if (cartproduct["$key"]["id"] ==
+                      productmap?["$index"]["id"]) {
                     flag = true;
                     absorbflag = true;
                   }
@@ -112,9 +106,9 @@ class _IndividualState extends State<Individual> {
                       children: <Widget>[
                         ClipRRect(
                             child: Hero(
-                              tag: productmap?["${index}"]["image"],
+                              tag: productmap?["$index"]["image"],
                               child: Image.network(
-                                productmap?["${index}"]["image"],
+                                productmap?["$index"]["image"],
                                 height: height/4,
                                 fit: BoxFit.fitHeight,
                                 alignment: Alignment.topCenter,
@@ -135,16 +129,19 @@ class _IndividualState extends State<Individual> {
                                   (!flag) ? Icons.add_shopping_cart : Icons
                                       .done),
                               onPressed: () async{
+                                var p = productmap?["$index"]["price"];
                                 if (!flag) {
+                                  productmap?["$index"]["price"] = qty*p;
                                   await perform.database?.add_cart(
-                                      productmap?["${index}"]);
+                                      productmap?["$index"]);
                                   absorbflag = true;
                                   setState(() {});
                                 }
                                 else {
                                   absorbflag = false;
+                                  productmap?["$index"]["price"] = qty*p;
                                   await perform.database?.remove_cart(
-                                      productmap?["${index}"]);
+                                      productmap?["$index"]);
                                   setState(() {});
                                 }
                               },
@@ -155,6 +152,7 @@ class _IndividualState extends State<Individual> {
                               child: DropdownButton<int>(
                                 items: <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map<
                                     DropdownMenuItem<int>>((int value) {
+                                      qty = value;
                                   return DropdownMenuItem<int>(
                                     value: value,
                                     child: new Text("$value"),

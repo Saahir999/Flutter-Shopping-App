@@ -229,7 +229,7 @@ class _AddState extends State<Add> {
         "price" : price
       });
       //reset();
-      Navigator.pop(context);
+      Navigator.popUntil(context, ModalRoute.withName('home'));
     }
     else
       {

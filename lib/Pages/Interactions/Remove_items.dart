@@ -98,7 +98,7 @@ class _RemoveState extends State<Remove> {
               }
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () { Navigator.pop(context); },
+            onPressed: () { Navigator.popUntil(context, ModalRoute.withName('home')); },
             child: Text("Save"),
           ),
         )
