@@ -16,9 +16,13 @@ class Remove extends StatefulWidget {
 
 class _RemoveState extends State<Remove> {
   @override
-
+  double height = 600;
+  double width = 250;
   Map? productmap;
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    height = mediaQuery.size.height;
+    width = mediaQuery.size.width;
     Item perform = Item.setfirebase(uid: Provider.of<User?>(context,listen:false)?.uid);
     return SafeArea(
         child: Scaffold(
@@ -54,8 +58,8 @@ class _RemoveState extends State<Remove> {
                                     child: ListTile(
                                       leading: Image(
                                         image: NetworkImage(productmap?["${index+1}"]['image']),
-                                        width: 90,
-                                        height: 90,
+                                        width: width/5,
+                                        height: height/5,
                                         loadingBuilder: (context, child, progress) {
                                           return progress == null
                                               ? child

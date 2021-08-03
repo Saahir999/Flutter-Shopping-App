@@ -23,9 +23,11 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
   }
-
+  double height =100.0;
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    height = mediaQuery.size.height;
     Item perform = Item.setfirebase(uid: Provider.of<User?>(context,listen:false)?.uid);
     return Scaffold(
       key: _scaffoldKey,
@@ -128,7 +130,7 @@ class _HomeState extends State<Home> {
                         ),
                          SizedBox(height: 20),
                          SizedBox(
-                           height: 100,
+                           height: height/6,
                            child: ListView.builder(
                                 physics: ClampingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
@@ -153,7 +155,7 @@ class _HomeState extends State<Home> {
                                             'productmap' : productmap
                                           });
                                         },
-                                          iconSize: 50,
+                                          iconSize: height/8,
                                         ),
                                     ]
                                   ),

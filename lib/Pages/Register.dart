@@ -29,7 +29,7 @@ class _RegisterState extends State<Register> {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              "Sign In",
+              "Register",
               style: TextStyle(
                 fontSize: 30.0,
               ),
@@ -48,10 +48,11 @@ class _RegisterState extends State<Register> {
                   ListTile(
                     leading: Icon(Icons.mail),
                     title: TextFormField(
-                      validator: (val) => val!.isEmpty ? 'Enter an email' : null,
+
                       onChanged: (value) {
                         email = value;
                       },
+
                       decoration: InputDecoration(
                         hintText: "Email",
                         fillColor: Colors.white,
@@ -80,7 +81,6 @@ class _RegisterState extends State<Register> {
                       onChanged: (value) {
                         password = value;
                       },
-                      validator: (val) => ((val?.length ?? 0 )< 6) ? 'Enter a password 6+ chars long' : null,
                       decoration: InputDecoration(
                         hintText: "Password",
                         fillColor: Colors.white,
@@ -101,17 +101,18 @@ class _RegisterState extends State<Register> {
                     ),
                   ),
                   ElevatedButton.icon(
-                      onPressed: () async {
-                        if(_formKey.currentState!.validate()){
-                          setState(() => loading = true);
-                          final result = authclass.registerWithEmail(email, password);
-                          if(result == null) {
-                            setState(() {
-                              loading = false;
-                              error = 'Could not sign in with those credentials';
-                            });
-                          }
-                        }
+                      onPressed: ()  {
+                        final result = authclass.registerWithEmail(
+                                email, password);
+                            if (result == null) {
+                              setState(() {
+                                loading = false;
+                                error =
+                                'Could not sign in with those credentials';
+                              });
+                            }
+
+
                       },
                     icon: Icon(Icons.verified),
                     label: Text("Register"),

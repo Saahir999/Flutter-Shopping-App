@@ -20,6 +20,7 @@ class _IndividualState extends State<Individual> {
   Authenticate authclass = Authenticate();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int dropdownValue = 1;
+  double height = 600;
   bool absorbflag = false;
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,8 @@ class _IndividualState extends State<Individual> {
     Item perform = Item.setfirebase(uid:uid);
     Map data  = ModalRoute.of(context)?.settings.arguments as Map;
     String index = data["index"];
+    final mediaQuery = MediaQuery.of(context);
+    height = mediaQuery.size.height;
     Map? productmap = data["productmap"];
     double price = 0.0;
     try{
@@ -112,8 +115,8 @@ class _IndividualState extends State<Individual> {
                               tag: productmap?["${index}"]["image"],
                               child: Image.network(
                                 productmap?["${index}"]["image"],
-                                height: 360,
-                                fit: BoxFit.cover,
+                                height: height/4,
+                                fit: BoxFit.fitHeight,
                                 alignment: Alignment.topCenter,
                               ),
                             )

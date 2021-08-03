@@ -16,11 +16,16 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   Map? calcprice = Map();
+  double height = 700;
   double pay = 0;
+  double width = 250;
   Item? perform;
   Map boughtproduct = Map();
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    height = mediaQuery.size.height;
+    width =mediaQuery.size.width;
     pay = 0;
     calcprice = Map();
     String? uid = Provider
@@ -66,8 +71,8 @@ class _CartState extends State<Cart> {
                                   key: ValueKey<int>(4),
                                   child: ListTile(
                                     leading: Container(
-                                      height: 70,
-                                      width: 70,
+                                      height: height/5,
+                                      width: height/5,
                                       child: Image(
                                         image: NetworkImage(
                                             cartmap?["${index + 1}"]["image"]),

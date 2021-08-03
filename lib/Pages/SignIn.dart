@@ -47,7 +47,6 @@ class _SignInState extends State<SignIn> {
                   ListTile(
                     leading: Icon(Icons.mail),
                     title: TextFormField(
-                      validator: (val) => val!.isEmpty ? 'Enter an email' : null,
                       onChanged: (value) {
                         email = value;
                       },
@@ -79,7 +78,6 @@ class _SignInState extends State<SignIn> {
                       onChanged: (value) {
                         password = value;
                       },
-                      validator: (val) => ((val?.length ?? 0 )< 6) ? 'Enter a password 6+ chars long' : null,
                       decoration: InputDecoration(
                         hintText: "Password",
                         fillColor: Colors.white,
@@ -100,9 +98,7 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                   ElevatedButton.icon(
-                      onPressed: () async {
-                        if(_formKey.currentState!.validate()){
-                          setState(() => loading = true);
+                      onPressed: ()  {
                           final result = authclass.signInWithEmail(email, password);
                           if(result == null) {
                             setState(() {
@@ -110,7 +106,7 @@ class _SignInState extends State<SignIn> {
                               error = 'Could not sign in with those credentials';
                             });
                           }
-                        }
+
                       },
                     icon: Icon(Icons.verified),
                     label: Text("Sign In"),

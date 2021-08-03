@@ -19,11 +19,16 @@ class _GridState extends State<Grid> {
   Authenticate authclass  = Authenticate();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List<ListTile> productgrid = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
 
     var productmap = ModalRoute.of(context)?.settings.arguments as Map;
-
     return Scaffold(
       key: _scaffoldKey,
         appBar: AppBar(
@@ -131,10 +136,11 @@ class _GridState extends State<Grid> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                Flexible(
                   //width:MediaQuery.of(context).size.width/2.2 ,  //Fitting 3.5 elements on screen in a column
                   //width: MediaQuery.of(context).size.height / 3.8 ,
-                  height: 70.0,
+                  //height: height/8.5,
+                  flex: 6,
                   child: Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Hero(
@@ -151,11 +157,15 @@ class _GridState extends State<Grid> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 75.0,
+                Flexible(
+                  //height: height/9.0,
+                  flex: 2,
                   child: Padding(
                     padding: const EdgeInsets.all(6.0),
-                    child: Text(productmap?[index]["title"]),
+                    child: Text(
+                        productmap?[index]["title"],
+
+                    ),
                   ),
                 ),
               ],
