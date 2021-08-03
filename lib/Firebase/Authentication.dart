@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Authenticate
@@ -8,8 +10,17 @@ class Authenticate
   {
     return _auth.authStateChanges();
   }
-  //TODO -> refer to https://firebase.flutter.dev/docs/auth/usage/#authentication-state for update
 
+  Stream<User?> get user2
+  {
+    return _auth.authStateChanges();
+  }
+
+  Stream<User?> get user3
+  {
+    return _auth.authStateChanges();
+  }
+  //TODO -> refer to https://firebase.flutter.dev/docs/auth/usage/#authentication-state for update
 
   Future browse() async
   {

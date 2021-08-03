@@ -16,12 +16,12 @@ void main() async {
 class MyApp extends StatelessWidget {
 
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => Item(),
-        child: StreamProvider<User?>.value(
+    return StreamProvider<User?>.value(
           value: Authenticate().user,
           initialData: FirebaseAuth.instance.currentUser,
-          child: Navigate(),
+          child: ChangeNotifierProvider(
+            create: (context) => Item(),
+            child: Navigate(),
           ),
     );
   }

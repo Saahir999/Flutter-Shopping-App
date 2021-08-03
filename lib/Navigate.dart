@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_flutter/Pages/AuthWrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'Pages/SignIn.dart';
 import 'Pages/ShopWrapper.dart';
 
 class Navigate extends StatefulWidget {
@@ -17,6 +17,6 @@ class _NavigateState extends State<Navigate> {
   Widget build(BuildContext context) {
 
     final usercheck = Provider.of<User?>(context);
-    return (usercheck!=null)?ShopWrapper() : SignIn();
+    return (usercheck!=null)?ShopWrapper() : AuthWrap();
   }
 }

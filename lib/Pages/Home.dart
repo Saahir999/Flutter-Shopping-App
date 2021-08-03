@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_flutter/Pages/Error.dart';
 import 'package:firebase_flutter/Firebase/Authentication.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,10 +14,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-//TODO-> displaying using listvioew builder and later gridview
-//TODO -> form validation , firebase error report
-//TODO -> implementing add and delete feature in class Item extends ChangeNotifier
-//TODO -> Taking a snapshot of firestore database acc to uid to access poducts and links
+//TODO -> form validation
 class _HomeState extends State<Home> {
   Map? productmap = {};
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -28,6 +26,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    Item perform = Item.setfirebase(uid: Provider.of<User?>(context,listen:false)?.uid);
     return Scaffold(
       key: _scaffoldKey,
           appBar: AppBar(
@@ -91,20 +90,20 @@ class _HomeState extends State<Home> {
                 ListTile(
                   title: const Text('Add Items'),
                   onTap: () {
-                    Navigator.pushNamed(context, 'Add');
+                    Navigator.pushNamed(context, 'Add').then((value) => setState(() {}));
                   },
                 ),
                 ListTile(
                   title: const Text('Remove Items'),
                   onTap: () {
-                    Navigator.pushNamed(context, 'Remove');
+                    Navigator.pushNamed(context, 'Remove').then((value) => setState(() {}));
                   },
                 ),
               ],
             ),
           ),
           body: FutureBuilder<Map>(
-              future: Provider.of<Item>(context, listen: false).products(),
+              future: perform.products(),
               builder: (context, snapshot) {
                 if(snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
@@ -141,7 +140,7 @@ class _HomeState extends State<Home> {
                                     children: <Widget>[
                                        IconButton(
                                           icon : Image.network(
-                                            (productmap?[index + 1])["image"],
+                                            (productmap?["${index + 1}"])["image"],
                                             loadingBuilder: (context , child , progress){
                                               return progress == null
                                                   ? child
@@ -150,7 +149,7 @@ class _HomeState extends State<Home> {
                                         ),
                                         onPressed: () {
                                           Navigator.pushNamed(context, 'Individual' , arguments: {
-                                            'index' : (index+1),
+                                            'index' : "${index+1}",
                                             'productmap' : productmap
                                           });
                                         },

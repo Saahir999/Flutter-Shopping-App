@@ -27,6 +27,7 @@ class _ShopWrapperState extends State<ShopWrapper> {
     return MaterialApp(
       initialRoute: 'home',
       routes: {
+        'Wrap' : (context) => ShopWrapper(),
         'home' : (context)=> Home(),
         'Settings' : (context)=> Settings(),
         'Orders' : (context)=> Orders(),

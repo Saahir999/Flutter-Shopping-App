@@ -87,13 +87,13 @@ class _GridState extends State<Grid> {
               ListTile(
                 title: const Text('Add Items'),
                 onTap: () {
-                  Navigator.pushNamed(context, 'Add');
+                  Navigator.pushNamed(context, 'Add').then((value) => setState(() {}));
                 },
               ),
               ListTile(
                 title: const Text('Remove Items'),
                 onTap: () {
-                  Navigator.pushNamed(context, 'Remove');
+                  Navigator.pushNamed(context, 'Remove').then((value) => setState(() {}));
                 },
               ),
             ],
@@ -125,7 +125,7 @@ class _GridState extends State<Grid> {
   }
 
   List<Widget> fetch(Map? productmap , BuildContext context) {
-    Widget w(int index) => GestureDetector(
+    Widget w(String index) => GestureDetector(
       child: Container(
           child: Card(
             child: Column(
