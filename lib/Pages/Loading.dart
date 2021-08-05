@@ -11,12 +11,10 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: Center(
           child: Text("Loading"),
         )
-      ),
     );
   }
 }

@@ -1,10 +1,6 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_flutter/Firebase/Authentication.dart';
 import 'package:firebase_flutter/Firebase/Database.dart';
 import 'package:firebase_flutter/Firebase/Storage.dart';
-import 'package:firebase_flutter/model/Product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
@@ -13,6 +9,7 @@ import 'dart:convert' as convert;
 class Item extends ChangeNotifier {
 
   Map productmap = {};
+  String name= "";
   var data;
   final String url ="https://fakestoreapi.com/products";
   String? uid;

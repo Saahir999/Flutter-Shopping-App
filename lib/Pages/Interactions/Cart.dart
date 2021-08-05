@@ -69,17 +69,25 @@ class _CartState extends State<Cart> {
                                 }
                                 return Dismissible(
                                   key: ValueKey<int>(4),
-                                  child: ListTile(
-                                    leading: Container(
-                                      height: height/5,
-                                      child: Image(
-                                        image: NetworkImage(
-                                            cartmap?["${index + 1}"]["image"]),
-                                        fit: BoxFit.fitHeight,
+                                  child: GestureDetector(
+                                    child: ListTile(
+                                      leading: Container(
+                                        height: height/5,
+                                        child: Image(
+                                          image: NetworkImage(
+                                              cartmap?["${index + 1}"]["image"]),
+                                          fit: BoxFit.fitHeight,
+                                        ),
                                       ),
+                                      title: Text(cartmap?["${index + 1}"]["title"]),
+                                      subtitle:Text( "${cartmap?["${index + 1}"]["price"]}"),
                                     ),
-                                    title: Text(cartmap?["${index + 1}"]["title"]),
-                                    subtitle:Text( "${cartmap?["${index + 1}"]["price"]}"),
+                                    onTap: (){
+                                      Navigator.popAndPushNamed(context,'Individual',arguments: {
+                                        'index' : "${index+1}",
+                                        'productmap' : cartmap,
+                                      } );
+                                    },
                                   ),
                                   onDismissed: (direction)async{
                                     await perform?.database?.remove_cart(

@@ -22,6 +22,7 @@ class _AddState extends State<Add> {
   double price =10.0;
   ImagePicker _picker = ImagePicker();
   String? name;
+  String? description;
   int? id;
   Item? perform;
   double opacity =0;
@@ -130,6 +131,28 @@ class _AddState extends State<Add> {
                               ),
                             ),
                           ),
+                          TextFormField(
+                            onChanged: (value) {
+                              description = value;
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Add description",
+                              fillColor: Colors.white,
+                              filled: true,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white,
+                                  width: 20.0,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.pink,
+                                  width: 2.0,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       )
@@ -219,12 +242,12 @@ class _AddState extends State<Add> {
       Map? p = await perform?.products();
       id =p?.length;
       String? temp = await perform?.storage?.downloadUrl(name!);
-      print(id);
-      print("id above google.com");
+
       await perform?.database?.additem({
         "id" : (id! + 1),
         "title":name,
         "image" : temp,
+        "description" : description,
         "category" : "added",
         "price" : price
       });

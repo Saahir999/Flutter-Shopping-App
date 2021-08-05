@@ -13,15 +13,34 @@ class Database {
   final CollectionReference add = FirebaseFirestore.instance.collection("add");
   final CollectionReference delete = FirebaseFirestore.instance.collection(
       "delete");
+  final CollectionReference review = FirebaseFirestore.instance.collection("review");
   String? uid;
 
   Authenticate authclass = Authenticate();
 
   Database({required this.uid});
 
+  Stream<QuerySnapshot>? get reviews
+  {
+    return review.snapshots();
+  }
+
   Future<void> buy(Map<String,dynamic> productmap) async
   {
-    await userdata.doc(uid).set(productmap);
+    var docsnap = await userdata.doc(uid).get();
+    Map products = Map();
+    if(docsnap.data() != null)
+    {
+      products = docsnap.data() as Map;
+    }
+    products.addAll(productmap);
+    Map<String,dynamic> pass = Map();
+    int i=1;
+    products.forEach((key, value) {
+      pass["${i}"] = products[key];
+      i++;
+    });
+    await userdata.doc(uid).set(pass);
   }
 
   Future<void> add_cart(Map<String,dynamic> singularproductmap) async {

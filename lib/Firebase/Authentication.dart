@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Authenticate
@@ -10,17 +11,6 @@ class Authenticate
   {
     return _auth.authStateChanges();
   }
-
-  Stream<User?> get user2
-  {
-    return _auth.authStateChanges();
-  }
-
-  Stream<User?> get user3
-  {
-    return _auth.authStateChanges();
-  }
-  //TODO -> refer to https://firebase.flutter.dev/docs/auth/usage/#authentication-state for update
 
   Future browse() async
   {
@@ -44,7 +34,6 @@ class Authenticate
       UserCredential creds = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? user = creds.user;
-
       return user;
     }
     catch(e)
@@ -54,7 +43,7 @@ class Authenticate
     }
   }
 
-  Future registerWithEmail(String email, String password) async
+  Future registerWithEmail( String email,String password) async
   {
     try {
       UserCredential creds = await _auth.createUserWithEmailAndPassword(email: email, password: password);

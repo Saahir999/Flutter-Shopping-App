@@ -1,5 +1,7 @@
 
+import 'package:firebase_flutter/Itemholder/Items.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../FireBase/Authentication.dart';
 import 'Loading.dart';
@@ -15,6 +17,7 @@ class _RegisterState extends State<Register> {
 
   late String email;
   late String password;
+  late String name;
   final _formKey = GlobalKey<FormState>();
   String error = '';
   bool loading = false;
@@ -45,6 +48,36 @@ class _RegisterState extends State<Register> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.person),
+                    title: TextFormField(
+
+                      onChanged: (value) {
+                        name = value;
+                      },
+
+                      decoration: InputDecoration(
+                        hintText: "Name",
+                        fillColor: Colors.white,
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 20.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.pink,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
                   ListTile(
                     leading: Icon(Icons.mail),
                     title: TextFormField(
@@ -102,11 +135,10 @@ class _RegisterState extends State<Register> {
                   ),
                   ElevatedButton.icon(
                       onPressed: ()  {
-                        final result = authclass.registerWithEmail(
-                                email, password);
+                        Provider.of<Item>(context,listen:false).name = name;
+                        final result = authclass.registerWithEmail(email,password);
                             if (result == null) {
                               setState(() {
-                                loading = false;
                                 error =
                                 'Could not sign in with those credentials';
                               });

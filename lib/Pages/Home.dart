@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_flutter/Pages/Error.dart';
 import 'package:firebase_flutter/Firebase/Authentication.dart';
@@ -19,16 +20,38 @@ class _HomeState extends State<Home> {
   Map? productmap = {};
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Authenticate authclass = Authenticate();
+  double height =100.0;
+
   @override
   void initState() {
     super.initState();
+
   }
-  double height =100.0;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if(Provider.of<Item>(context,listen:false).name !="")
+    {
+      FirebaseFirestore.instance.collection("name").doc("${Provider.of<User?>(context,listen:false)?.uid}").set({
+        "name":Provider.of<Item>(context,listen:false).name,
+      });
+    }
+    username(context);
+  }
+  void username(BuildContext context) async
+  {
+    DocumentSnapshot? docsnap = await FirebaseFirestore.instance.collection("name").doc(Provider.of<User?>(context,listen:false)?.uid).get();
+    Map ext = docsnap.data() as Map;
+    Provider.of<Item>(context,listen:false).name = ext["name"];
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     height = mediaQuery.size.height;
-    Item perform = Item.setfirebase(uid: Provider.of<User?>(context,listen:false)?.uid);
+    String? uid =  Provider.of<User?>(context,listen:false)?.uid;
+    Item perform = Item.setfirebase(uid:uid);
+
     return Scaffold(
       key: _scaffoldKey,
           appBar: AppBar(
@@ -77,11 +100,11 @@ class _HomeState extends State<Home> {
               // Important: Remove any padding from the ListView.
               padding: EdgeInsets.zero,
               children: [
-                const DrawerHeader(
+                DrawerHeader(
                   decoration: BoxDecoration(
                     color: Colors.blue,
                   ),
-                  child: Text('Edit'),
+                  child: Text("Welcome,${Provider.of<Item>(context,listen:false).name}"),
                 ),
                 ListTile(
                   title: const Text('Your Order'),
