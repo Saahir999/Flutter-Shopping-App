@@ -106,7 +106,7 @@ class _AddState extends State<Add> {
                           TextFormField(
                             onChanged: (value) {
                               try {
-                                price = value as double;
+                                price = decimal(value);
                               }
                               catch(e)
                               {
@@ -190,7 +190,12 @@ class _AddState extends State<Add> {
       opacity = 1;
     });
   }
-
+  double decimal(String num)
+  {
+    var myDouble = double.parse(num);
+    assert(myDouble is double);
+    return myDouble;
+  }
   _imgFromGallery() async {
     XFile? image = (await  _picker.pickImage(
         source: ImageSource.gallery, imageQuality: 50
@@ -251,7 +256,7 @@ class _AddState extends State<Add> {
         "category" : "added",
         "price" : price
       });
-      //reset();
+
       Navigator.popUntil(context, ModalRoute.withName('home'));
     }
     else

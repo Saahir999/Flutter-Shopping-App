@@ -189,8 +189,14 @@ class _StreamerState extends State<Streamer> {
                           Map<String,String> singleton = {"name": Provider.of<Item>(context, listen: false).name,
                             "review": review};
                           Map<String,Map<String,String>>? temp = {l:singleton};
+                          store.removeWhere((key, value){
+                            bool f=false;
+                            if(value["name"]==Provider.of<Item>(context, listen: false).name){
+                              f = true;
+                            }
+                            return f;
+                          });
                           store.addAll(temp);
-
                           Map<String,dynamic> pass = Map();
                           int i= 1;
                           store.forEach((key,value){
