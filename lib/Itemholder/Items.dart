@@ -10,6 +10,7 @@ class Item extends ChangeNotifier {
 
   Map productmap = {};
   String name= "";
+  bool check= false;
   var data;
   final String url ="https://fakestoreapi.com/products";
   String? uid;

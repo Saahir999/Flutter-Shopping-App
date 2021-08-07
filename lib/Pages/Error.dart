@@ -6,7 +6,7 @@ class ErrorPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(child: Text("Please restart app")),
+      child: Center(child: Text("Please Check your internet connection")),
     );
   }
 }

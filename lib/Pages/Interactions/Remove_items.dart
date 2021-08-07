@@ -32,15 +32,15 @@ class _RemoveState extends State<Remove> {
           body:FutureBuilder<Map>(
               future: perform.products(),
               builder: (context, snapshot) {
+                Widget child;
                 if(snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
                     //Toast error
-                    return ErrorPopup();
+                    child = ErrorPopup();
                   }
                   else {
                     productmap = snapshot.data;
-                    int? len = productmap?.length;
-                    return Padding(
+                    child = Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SingleChildScrollView(
                         child: Column(
@@ -93,8 +93,12 @@ class _RemoveState extends State<Remove> {
                 }
                 else
                 {
-                  return Loading();
+                  child = Loading();
                 }
+                return AnimatedSwitcher(
+                  duration: Duration(seconds: 1),
+                  child: child,
+                );
               }
           ),
           floatingActionButton: FloatingActionButton(

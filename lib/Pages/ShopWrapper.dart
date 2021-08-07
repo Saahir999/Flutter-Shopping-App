@@ -1,4 +1,5 @@
 import 'package:firebase_flutter/Firebase/Authentication.dart';
+import 'package:firebase_flutter/Pages/Interactions/Parallax_List.dart';
 
 import 'Home.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'Interactions/Orders.dart';
 import 'Interactions/Remove_items.dart';
 import 'Interactions/Repertoire.dart';
 import 'Interactions/Settings.dart';
+import 'Interactions/Streamer.dart';
 
 class ShopWrapper extends StatefulWidget {
   const ShopWrapper({Key? key}) : super(key: key);
@@ -35,6 +37,7 @@ class _ShopWrapperState extends State<ShopWrapper> {
         'Add' : (context)=> Add(),
         "Remove" : (context)=> Remove(),
         "Grid" : (context)=> Grid(),
+        "Streamer": (context)=> Streamer(),
         'Individual' : (context) => Individual()
       },
 

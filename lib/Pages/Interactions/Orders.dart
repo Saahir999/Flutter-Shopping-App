@@ -20,6 +20,9 @@ class _OrdersState extends State<Orders> {
   Widget build(BuildContext context) {
     String? uid = Provider.of<User?>(context,listen:false)?.uid;
     Item perform = Item.setfirebase(uid: uid);
+    final mediaQuery = MediaQuery.of(context);
+    double height = mediaQuery.size.height;
+    double width = mediaQuery.size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Orders"),
@@ -59,7 +62,8 @@ class _OrdersState extends State<Orders> {
                               return ListTile(
                                 leading: Image(
                                   image: NetworkImage(temp?["${index+1}"]["image"]),
-                                  fit: BoxFit.fill,
+                                  width: width/5,
+                                  height: height/5,
                                 ),
                                 title: Text(temp?["${index+1}"]["title"]),
                               );

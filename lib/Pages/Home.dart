@@ -66,15 +66,20 @@ class _HomeState extends State<Home> {
             actions: <Widget>[
               Padding(
                   padding: EdgeInsets.only(right: 20.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'Cart');
-                    },
-                    child: Icon(
-                      Icons.shopping_cart,
-                      size: 26.0,
+                  child: InkWell(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, 'Cart');
+                      },
+                      child: Icon(
+                        Icons.shopping_cart,
+                        size: 26.0,
+                      ),
                     ),
-                  )),
+                    onTap: (){
+                    },
+                  ),
+              ),
               PopupMenuButton<int>(
                 onSelected: (item) => onSelected(context, item, authclass),
                 itemBuilder: (context) =>
@@ -104,7 +109,7 @@ class _HomeState extends State<Home> {
                   decoration: BoxDecoration(
                     color: Colors.blue,
                   ),
-                  child: Text("Welcome,${Provider.of<Item>(context,listen:false).name}"),
+                  child: Text("Welcome,${Provider.of<Item>(context,listen:false).name}",style: TextStyle(fontSize: 18),),
                 ),
                 ListTile(
                   title: const Text('Your Order'),
@@ -144,12 +149,17 @@ class _HomeState extends State<Home> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                        GestureDetector(
-                          onTap: (){Navigator.pushNamed(context, 'Grid',arguments: productmap);},
-                          child: ListTile(
-                            leading : Text("Products"),
-                            trailing: Icon(Icons.arrow_forward_outlined),
+                        InkWell(
+                          child: GestureDetector(
+                            onTap: ()async{
+                              await Future.delayed(const Duration(milliseconds: 500));
+                              Navigator.pushNamed(context, 'Grid',arguments: productmap);},
+                            child: ListTile(
+                              leading : Text("Products"),
+                              trailing: Icon(Icons.arrow_forward_outlined),
+                            ),
                           ),
+                          onTap: (){},
                         ),
                          SizedBox(height: 20),
                          SizedBox(
@@ -212,6 +222,7 @@ class _HomeState extends State<Home> {
       //???
         break;
       case 2:
+        Provider.of<Item>(context,listen: false).name="";
         authclass.signOut();
         break;
     }

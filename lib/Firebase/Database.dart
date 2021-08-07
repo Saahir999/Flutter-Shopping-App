@@ -15,9 +15,7 @@ class Database {
       "delete");
   final CollectionReference review = FirebaseFirestore.instance.collection("review");
   String? uid;
-
   Authenticate authclass = Authenticate();
-
   Database({required this.uid});
 
   Stream<QuerySnapshot>? get reviews
@@ -33,6 +31,17 @@ class Database {
     {
       products = docsnap.data() as Map;
     }
+    Map same = Map();
+    products.removeWhere((key,value){
+      bool f=false;
+      productmap.forEach((key2, value2) {
+        if(value["id"]==value2["id"])
+          {
+            f= true;
+          }
+      });
+      return f;
+    });
     products.addAll(productmap);
     Map<String,dynamic> pass = Map();
     int i=1;
@@ -43,28 +52,30 @@ class Database {
     await userdata.doc(uid).set(pass);
   }
 
-  Future<void> add_cart(Map<String,dynamic> singularproductmap) async {
+  Future<void> add_cart(Map<String,dynamic> singularproductmap,int qty) async {
     var docsnap = await usercart.doc(uid).get();
     Map products = Map();
     if(docsnap.data() != null)
     {
       products = docsnap.data() as Map;
     }
+    singularproductmap.addAll({"qty":qty});
     String l = "${singularproductmap["id"]}";
     Map<String,dynamic> temp = {l:singularproductmap};
     products.addAll(temp);
     Map<String,dynamic> pass = Map();
     int i=1;
     products.forEach((key, value) {
-      pass["${i}"] = products[key];
+      pass["${i}"] = value;
       i++;
     });
     await usercart.doc(uid).set(pass);
   }
 
-  Future<void> remove_cart(Map<String,dynamic> singularproductmap) async {
+  Future<void> remove_cart(Map<String,dynamic> singularproductmap,int qty) async {
     var docsnap = await usercart.doc(uid).get();
     Map products = Map();
+    singularproductmap.addAll({"qty":qty});
     if(docsnap.exists)
     {
       products = docsnap.data() as Map ;
