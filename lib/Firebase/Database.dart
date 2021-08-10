@@ -14,6 +14,7 @@ class Database {
   final CollectionReference delete = FirebaseFirestore.instance.collection(
       "delete");
   final CollectionReference review = FirebaseFirestore.instance.collection("review");
+  final CollectionReference name = FirebaseFirestore.instance.collection("name");
   String? uid;
   Authenticate authclass = Authenticate();
   Database({required this.uid});

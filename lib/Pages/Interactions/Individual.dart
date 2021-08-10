@@ -54,9 +54,9 @@ class _IndividualState extends State<Individual> {
             return Container(
               child: Column(
                 children: <Widget>[
-                  Text("Description"),
+                  Card(child: Text("Description",style:TextStyle(fontSize: 28))),
                   Card(
-                    child: Text(desc ?? ""),
+                    child: Text(desc ?? "",style:TextStyle(fontSize: 22)),
                   ),
                 ],
               ),
@@ -184,12 +184,12 @@ class _IndividualState extends State<Individual> {
                                               fontSize: 18,
                                               ),
                                             ),
-                                          onPressed: (f) ? () {
+                                          onPressed:() {
 
                                           Navigator.pushNamed(context, 'Streamer',arguments: {"index":index,
-                                          "productmap": productmap
+                                          "productmap": productmap,"flag":f
                                           });
-                                          } : null,
+                                          } ,
                                         );
 
                               }

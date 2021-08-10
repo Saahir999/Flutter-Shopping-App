@@ -1,7 +1,8 @@
-//TODO-> add animation for InkWell for GestureDetector , Hero speed, , Background Image ,
-//TODO-> Parallax, GridView padding/margin animation ?
-//TODO ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-//       content: Text('Tap'),
-//     )); TODO-> a toast here
-// TODO-> , add animation to Loading() and ErrorPopUp()
-//TODO-> Settings for email or password change , user name change
+//TODO ->Remove making a list and deleting later to avoid reload
+//TODO->, Background Image
+// TODO->add animation to Loading()
+//TODO ->Lottie animation
+//TODO-> adding another api call using http (convert to Map<String,Map<String,dynamic>> and plug into add(),delete() and pass)
+//TODO-> Storing network images in internal storage as cache for easier retrieval(extract and store in Home and pass with image key of productmap)
+//TODO-> Parallax GestureDetector
+//TODO-> Updating existing products

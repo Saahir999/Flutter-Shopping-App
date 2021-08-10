@@ -39,6 +39,7 @@ dependencies:
   image_picker: ^0.8.2
   xfile: ^1.1.0
   http: ^0.13.3
+  google_sign_in: ^5.0.7
 
 dev_dependencies:
   flutter_test:
@@ -57,7 +58,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/Error.jpg
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

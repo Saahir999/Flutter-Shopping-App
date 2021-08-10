@@ -25,6 +25,7 @@ class _StreamerState extends State<Streamer> {
     var data = ModalRoute.of(context)!.settings.arguments as Map;
     String index = data["index"];
     Map productmap = data["productmap"];
+    bool flag = data["flag"];
 
     return SafeArea(
           child: Scaffold(
@@ -53,7 +54,7 @@ class _StreamerState extends State<Streamer> {
                             int docId = search(query, index);
                             if (docId != query.size) {
                               DocumentSnapshot? docsnap = query.docs[docId];
-                              if (docsnap != null) {
+                              if (docsnap.exists) {
                                 bool flag = false;
                                 Map? rev = docsnap.data() as Map?;
                                 print(rev);
@@ -81,10 +82,20 @@ class _StreamerState extends State<Streamer> {
                                                   children: <
                                                       Widget>[
                                                     ListTile(
-                                                      leading: Card(
-                                                          child: (Icon(
-                                                              Icons
-                                                                  .person_pin))),
+                                                      leading: Container(
+                                                        height: 50,
+                                                        child: Card(
+                                                            child: (rev?["${pos +
+                                                                1}"]["profile"] == "")?Image(
+                                                              image:AssetImage("assets/profile.jpg"),
+                                                              fit: BoxFit.fitHeight,
+                                                            ):Image(
+                                                              image:NetworkImage(rev?["${pos +
+                                                                  1}"]["profile"]),
+                                                              fit: BoxFit.fitHeight,
+                                                            ),
+                                                        ),
+                                                      ),
                                                       title: Text(
                                                           rev?["${pos +
                                                               1}"]["name"]),
@@ -135,7 +146,11 @@ class _StreamerState extends State<Streamer> {
                     } ,
                   ),
                 ),
-                ElevatedButton(onPressed: (){showSheet(productmap, index);}, child: Text("Add one")),
+                ElevatedButton(onPressed: (flag)?(){showSheet(productmap, index);}:(){
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Buy to give review'),
+                  ));
+                  }, child: Text("Add one")),
               ],
             ),
           )
@@ -181,30 +196,7 @@ class _StreamerState extends State<Streamer> {
                     ElevatedButton(
                       onPressed: () async {
                         if((productmap != null)&&(uid != null)) {
-                          DocumentSnapshot? docsnap = await perform?.database?.review.doc(index).get();
-                          Map<dynamic,dynamic>? store = Map();
-                          store = docsnap!.data() as Map? ?? Map();
-
-                          String l ="$uid";
-                          Map<String,String> singleton = {"name": Provider.of<Item>(context, listen: false).name,
-                            "review": review};
-                          Map<String,Map<String,String>>? temp = {l:singleton};
-                          store.removeWhere((key, value){
-                            bool f=false;
-                            if(value["name"]==Provider.of<Item>(context, listen: false).name){
-                              f = true;
-                            }
-                            return f;
-                          });
-                          store.addAll(temp);
-                          Map<String,dynamic> pass = Map();
-                          int i= 1;
-                          store.forEach((key,value){
-                            pass["$i"]=value;
-                            i++;
-                          });
-                          await perform?.database?.review.doc(
-                              "${productmap[index]["id"]}").set(pass);
+                          await perform?.storeReview(index: index, name: Provider.of<Item>(context,listen:false).name, review: review, uid: uid,productmap2: productmap);
                           Navigator.pop(context);
                         }
                       },

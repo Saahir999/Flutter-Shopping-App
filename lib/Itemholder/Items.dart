@@ -1,15 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:core';
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_flutter/Firebase/Database.dart';
 import 'package:firebase_flutter/Firebase/Storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
-import 'dart:convert' as convert;
 
 class Item extends ChangeNotifier {
 
   Map productmap = {};
   String name= "";
+  String? googleName = "";
   bool check= false;
   var data;
   final String url ="https://fakestoreapi.com/products";
@@ -100,6 +104,48 @@ class Item extends ChangeNotifier {
     return pass;
   }
 
+  Future<String> getProfile() async{
+    DocumentSnapshot? docsnap = await database?.name.doc(uid).get();
+    Map details = docsnap?.data() as Map;
+    return details["profile"];
+
+  }
+
+  Future storeReview({required String index,required String name,required String review,required String? uid,required Map productmap2})
+  async{
+    DocumentSnapshot? docsnap = await database?.review.doc(index).get();
+    Map<dynamic,dynamic>? store = Map();
+    store = docsnap!.data() as Map? ?? Map();
+
+    DocumentSnapshot? docsnap_name = await database?.name.doc(uid).get();
+    Map<dynamic,dynamic>? store2 = Map();
+    store2 = docsnap_name!.data() as Map? ?? Map();
+    String profile = store2["profile"] ?? "";
+
+    String l ="$uid";
+    Map<String,String> singleton = {
+      "name":name,
+      "review": review,
+      "profile": profile,
+    };
+    Map<String,Map<String,String>>? temp = {l:singleton};
+    store.removeWhere((key, value){
+      bool f=false;
+      if(value["name"]==name){
+        f = true;
+      }
+      return f;
+    });
+    store.addAll(temp);
+    Map<String,dynamic> pass = Map();
+    int i= 1;
+    store.forEach((key,value){
+      pass["$i"]=value;
+      i++;
+    });
+    await database?.review.doc(
+        "${productmap2[index]["id"]}").set(pass);
+  }
 }
 // id
 // id ,title , price , description , category , image

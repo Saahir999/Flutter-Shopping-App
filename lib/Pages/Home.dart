@@ -30,25 +30,44 @@ class _HomeState extends State<Home> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    //Register
     if(Provider.of<Item>(context,listen:false).name !="")
     {
       FirebaseFirestore.instance.collection("name").doc("${Provider.of<User?>(context,listen:false)?.uid}").set({
         "name":Provider.of<Item>(context,listen:false).name,
+        "profile":"",
       });
     }
+    if(Provider.of<Item>(context,listen:false).googleName !="")
+    {
+      FirebaseFirestore.instance.collection("name").doc("${Provider.of<User?>(context,listen:false)?.uid}").set({
+        "name":Provider.of<Item>(context,listen:false).googleName,
+        "profile":"",
+      });
+    }
+    print("dependencies");
     username(context);
   }
   void username(BuildContext context) async
   {
-    DocumentSnapshot? docsnap = await FirebaseFirestore.instance.collection("name").doc(Provider.of<User?>(context,listen:false)?.uid).get();
-    Map ext = docsnap.data() as Map;
-    Provider.of<Item>(context,listen:false).name = ext["name"];
+    //Sign In
+    print("username");
+    await Future.delayed(const Duration(seconds: 2), () {});
+      DocumentSnapshot? docsnap = await FirebaseFirestore.instance.collection(
+          "name").doc(Provider
+          .of<User?>(context, listen: false)
+          ?.uid).get();
+      Map ext = docsnap.data() as Map;
+      Provider
+          .of<Item>(context, listen: false)
+          .name = ext["name"];
   }
-
+  int k=0;
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     height = mediaQuery.size.height;
+    if(k<1){username(context); k++;setState((){});}
     String? uid =  Provider.of<User?>(context,listen:false)?.uid;
     Item perform = Item.setfirebase(uid:uid);
 
@@ -109,7 +128,7 @@ class _HomeState extends State<Home> {
                   decoration: BoxDecoration(
                     color: Colors.blue,
                   ),
-                  child: Text("Welcome,${Provider.of<Item>(context,listen:false).name}",style: TextStyle(fontSize: 18),),
+                  child:  Text("Welcome,${Provider.of<Item>(context,listen:false).name}",style: TextStyle(fontSize: 18),),
                 ),
                 ListTile(
                   title: const Text('Your Order'),
@@ -223,6 +242,9 @@ class _HomeState extends State<Home> {
         break;
       case 2:
         Provider.of<Item>(context,listen: false).name="";
+        Provider.of<Item>(context,listen: false).googleName = "";
+        authclass.signOutWithGoogle();
+        k=0;
         authclass.signOut();
         break;
     }

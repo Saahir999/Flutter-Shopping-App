@@ -1,4 +1,6 @@
+import 'package:firebase_flutter/Itemholder/Items.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../FireBase/Authentication.dart';
 
 class SignIn extends StatefulWidget {
@@ -68,101 +70,121 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin{
             ),
             body: Padding(
               padding: const EdgeInsets.all(5.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.mail),
-                      title: TextFormField(
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Email",
-                          fillColor: Colors.white,
-                          filled: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 20.0,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.pink,
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.vpn_key),
-                      title: TextFormField(
-                        onChanged: (value) {
-                          password = value;
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Password",
-                          fillColor: Colors.white,
-                          filled: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 20.0,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.pink,
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height:10.0),
-                    Container(
-                      child: Stack(
+              child: ListView(
+                children: <Widget>[
+                  Container(height: 100,child: Image(image: AssetImage("assets/main_icon.jpg"),fit:BoxFit.fitHeight)),
+                  SizedBox(height:20),
+                  Center(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Opacity(
-                            opacity: _sizeAnimate.value / 100,
-                            child: Container(
-                              child: ElevatedButton.icon(
-                                onPressed: () async {
-                                  await _controller.forward();
-                                  authclass.signInWithEmail(email, password);
-                                },
-                                icon: Icon(Icons.verified,
-                                  size: _sizeAnimate.value / 5,
+                          ListTile(
+                            leading: Icon(Icons.mail),
+                            title: TextFormField(
+                              onChanged: (value) {
+                                email = value;
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Email",
+                                fillColor: Colors.white,
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                    width: 2.0,
+                                  ),
                                 ),
-                                label: Text("Sign In", style: TextStyle(
-                                    fontSize: _sizeAnimate.value / 5),),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.pink,
+                                    width: 2.0,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                          Opacity(
-                            opacity: _sizeAnimate2.value / 100,
-                            child: Container(
-                              height: _sizeAnimate2.value / 2,
-                              width: _sizeAnimate2.value / 2,
-                              child: CircularProgressIndicator(
-                                strokeWidth: _sizeAnimate2.value / 15,
-                                color: Colors.blue[900],
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.vpn_key),
+                            title: TextFormField(
+                              onChanged: (value) {
+                                password = value;
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Password",
+                                fillColor: Colors.white,
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.pink,
+                                    width: 2.0,
+                                  ),
+                                ),
                               ),
                             ),
+                          ),
+                          SizedBox(height:10.0),
+                          Container(
+                            child: Stack(
+                              children: <Widget>[
+                                Opacity(
+                                  opacity: _sizeAnimate.value / 100,
+                                  child: Container(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () async {
+                                        await _controller.forward();
+                                        Provider.of<Item>(context,listen:false).name="";
+                                        //add image url/asset null
+                                        authclass.signInWithEmail(email, password);
+                                      },
+                                      icon: Icon(Icons.verified,
+                                        size: _sizeAnimate.value / 5,
+                                      ),
+                                      label: Text("Sign In", style: TextStyle(
+                                          fontSize: _sizeAnimate.value / 5),),
+                                    ),
+                                  ),
+                                ),
+                                Opacity(
+                                  opacity: _sizeAnimate2.value / 100,
+                                  child: Container(
+                                    height: _sizeAnimate2.value / 2,
+                                    width: _sizeAnimate2.value / 2,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: _sizeAnimate2.value / 15,
+                                      color: Colors.blue[900],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 33),
+                          ElevatedButton.icon(
+                              onPressed: ()async{
+                                await authclass.signInWithGoogle();
+                                Provider.of<Item>(context,listen:false).googleName = "";
+                                //add image asset/url null
+                              },
+                              icon: Icon(Icons.outgoing_mail),
+                              label :Text("Google Sign In")
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

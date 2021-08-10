@@ -7,6 +7,7 @@ import 'Interactions/Add_items.dart';
 import 'Interactions/Cart.dart';
 import 'Interactions/Individual.dart';
 import 'Interactions/Orders.dart';
+import 'Interactions/Password_change.dart';
 import 'Interactions/Remove_items.dart';
 import 'Interactions/Repertoire.dart';
 import 'Interactions/Settings.dart';
@@ -38,7 +39,8 @@ class _ShopWrapperState extends State<ShopWrapper> {
         "Remove" : (context)=> Remove(),
         "Grid" : (context)=> Grid(),
         "Streamer": (context)=> Streamer(),
-        'Individual' : (context) => Individual()
+        'Individual' : (context) => Individual(),
+        'passwordchange':(context)=> ChangeDetails(),
       },
 
     );

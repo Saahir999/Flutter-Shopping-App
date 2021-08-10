@@ -93,7 +93,7 @@ class _RemoveState extends State<Remove> {
                 }
                 else
                 {
-                  child = Loading();
+                  child = CircularProgressIndicator();
                 }
                 return AnimatedSwitcher(
                   duration: Duration(seconds: 1),

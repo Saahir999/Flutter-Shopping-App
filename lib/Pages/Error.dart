@@ -6,7 +6,12 @@ class ErrorPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(child: Text("Please Check your internet connection")),
+      child: Center(child: Column(
+        children: <Widget>[
+          Image(image:AssetImage("assets/Error.jpg"),),
+          Text("Please Check your internet connection"),
+        ],
+      )),
     );
   }
 }
