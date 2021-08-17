@@ -136,98 +136,103 @@ class _HomeState extends State<Home> {
                     Navigator.pushNamed(context, 'Orders');
                   },
                 ),
-                ListTile(
+                (uid == "tkq0ZcOJawV8AUMTqWKBj5nMuf32")?ListTile(
                   title: const Text('Add Items'),
                   onTap: () {
                     Navigator.pushNamed(context, 'Add').then((value) => setState(() {}));
                   },
-                ),
-                ListTile(
+                ):Container(),
+                (uid == "tkq0ZcOJawV8AUMTqWKBj5nMuf32")?ListTile(
                   title: const Text('Remove Items'),
                   onTap: () {
                     Navigator.pushNamed(context, 'Remove').then((value) => setState(() {}));
                   },
-                ),
+                ):Container(),
               ],
             ),
           ),
-          body: FutureBuilder<Map>(
-              future: perform.products(),
-              builder: (context, snapshot) {
-                if(snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                  //Toast error
-                  return ErrorPopup();
-                  }
-                  else {
-                  productmap = snapshot.data;
-                  int? len = productmap?.length;
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                        InkWell(
-                          child: GestureDetector(
-                            onTap: ()async{
-                              await Future.delayed(const Duration(milliseconds: 500));
-                              Navigator.pushNamed(context, 'Grid',arguments: productmap);},
-                            child: ListTile(
-                              leading : Text("Products"),
-                              trailing: Icon(Icons.arrow_forward_outlined),
-                            ),
-                          ),
-                          onTap: (){},
-                        ),
-                         SizedBox(height: 20),
-                         SizedBox(
-                           height: height/6,
-                           child: ListView.builder(
-                                physics: ClampingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: len ?? 0,
-                                itemBuilder: (context, index) {
-                                return Card(
-                                  child: Container(
-                                    child: Column(
-                                    children: <Widget>[
-                                       IconButton(
-                                          icon : Image.network(
-                                            (productmap?["${index + 1}"])["image"],
-                                            loadingBuilder: (context , child , progress){
-                                              return progress == null
-                                                  ? child
-                                                  : CircularProgressIndicator();
-                                            },
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pushNamed(context, 'Individual' , arguments: {
-                                            'index' : "${index+1}",
-                                            'productmap' : productmap
-                                          });
-                                        },
-                                          iconSize: height/8,
-                                        ),
-                                    ]
-                                  ),
+          body: Stack(
+            children: [
+              Container(height: height,child: Image.asset("assets/bg2.jpg",fit:BoxFit.fitHeight)),
+              FutureBuilder<Map>(
+                  future: perform.products(),
+                  builder: (context, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                      //Toast error
+                      return ErrorPopup();
+                      }
+                      else {
+                      productmap = snapshot.data;
+                      int? len = productmap?.length;
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                            InkWell(
+                              child: GestureDetector(
+                                onTap: ()async{
+                                  await Future.delayed(const Duration(milliseconds: 500));
+                                  Navigator.pushNamed(context, 'Grid',arguments: productmap);},
+                                child: ListTile(
+                                  leading : Text("Products",style: TextStyle(color: Colors.white),),
+                                  trailing: Icon(Icons.arrow_forward_outlined,color: Colors.white,),
+                                ),
                               ),
-                            );
-                          }
+                              onTap: (){},
+                            ),
+                             SizedBox(height: 20),
+                             SizedBox(
+                               height: height/6,
+                               child: ListView.builder(
+                                    physics: ClampingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: len ?? 0,
+                                    itemBuilder: (context, index) {
+                                    return Card(
+                                      child: Container(
+                                        child: Column(
+                                        children: <Widget>[
+                                           IconButton(
+                                              icon : Image.network(
+                                                (productmap?["${index + 1}"])["image"],
+                                                loadingBuilder: (context , child , progress){
+                                                  return progress == null
+                                                      ? child
+                                                      : CircularProgressIndicator();
+                                                },
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pushNamed(context, 'Individual' , arguments: {
+                                                'index' : "${index+1}",
+                                                'productmap' : productmap
+                                              });
+                                            },
+                                              iconSize: height/8,
+                                            ),
+                                        ]
+                                      ),
+                                  ),
+                                );
+                              }
+                            ),
+                           ),
+                          ]
                         ),
-                       ),
-                      ]
                     ),
-                ),
-                  );
+                      );
+                  }
+                }
+                else
+                {
+                  return Loading();
+                }
               }
-            }
-            else
-            {
-              return Loading();
-            }
-          }
-        )
+        ),
+            ],
+          )
 
     );
   }

@@ -71,164 +71,171 @@ class _CartState extends State<Cart> with SingleTickerProviderStateMixin{
             ElevatedButton(onPressed:(){ setState((){}); }, child: Text("Refresh"))
           ],
         ),
-        body: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: 500,
-                child: FutureBuilder<Map?>(
-                  future: perform?.addToCartWidget(),
-                  builder: (context, snapshot) {
-                    Widget child;
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      Map<dynamic,dynamic>? cartmap;
-                      if (snapshot.hasError) {
-                        child = ErrorPopup();
-                      }
-                      else {
-                        cartmap = snapshot.data;
-                        int len = cartmap?.length ?? 0;
-                        if (cartmap != null ) {
-                          boughtproduct = cartmap ;
-                          child =  Container(
-                            height: 700,
-                            child: ListView.builder(
-                              itemBuilder: (context, index) {
-                                if (index == 0) {
-                                  calcprice = cartmap;
-                                }
-                                double p = ((cartmap?["${index + 1}"]["price"]).toDouble() )*((cartmap?["${index + 1}"]["qty"]).toDouble());
-                                return Dismissible(
-                                  key: ValueKey<int>(4),
-                                  child: InkWell(
-                                    child: GestureDetector(
-                                      child: ListTile(
-                                        leading:  Image(
-                                            image: NetworkImage(
-                                                cartmap?["${index + 1}"]["image"]),
-                                                width: width/5,
-                                                height: height/5,
-                                                ),
-                                        title: Text(cartmap?["${index + 1}"]["title"]),
-                                        subtitle:Text( "${p}"),
+        body: Stack(
+          children: [
+            Container(height: height,child: Image.asset("assets/background.jpg",fit:BoxFit.fitHeight)),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    height: 500,
+                    child: FutureBuilder<Map?>(
+                      future: perform?.addToCartWidget(),
+                      builder: (context, snapshot) {
+                        Widget child;
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          Map<dynamic,dynamic>? cartmap;
+                          if (snapshot.hasError) {
+                            child = ErrorPopup();
+                          }
+                          else {
+                            cartmap = snapshot.data;
+                            int len = cartmap?.length ?? 0;
+                            if (cartmap != null ) {
+                              boughtproduct = cartmap ;
+                              child =  Container(
+                                height: 700,
+                                child: ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    if (index == 0) {
+                                      calcprice = cartmap;
+                                    }
+                                    double p = ((cartmap?["${index + 1}"]["price"]).toDouble() )*((cartmap?["${index + 1}"]["qty"]).toDouble());
+                                    return Dismissible(
+                                      key: ValueKey<int>(4),
+                                      child: InkWell(
+                                        child: GestureDetector(
+                                          child: Card(
+                                            child: ListTile(
+                                              leading:  Image(
+                                                  image: NetworkImage(
+                                                      cartmap?["${index + 1}"]["image"]),
+                                                      width: width/5,
+                                                      height: height/5,
+                                                      ),
+                                              title: Text(cartmap?["${index + 1}"]["title"]),
+                                              subtitle:Text( "${p}"),
+                                            ),
+                                          ),
+                                          onTap: (){
+                                            Navigator.popAndPushNamed(context,'Individual',arguments: {
+                                              'index' : "${index+1}",
+                                              'productmap' : cartmap,
+                                            } );
+                                          },
+                                        ),
+                                        onTap: (){},
                                       ),
-                                      onTap: (){
-                                        Navigator.popAndPushNamed(context,'Individual',arguments: {
-                                          'index' : "${index+1}",
-                                          'productmap' : cartmap,
-                                        } );
+                                      onDismissed: (direction)async{
+                                        await perform?.database?.remove_cart(
+                                            cartmap?["${index+1}"],cartmap?["${index+1}"]["qty"]);
+
+                                        setState((){
+                                          cartmap?.forEach((key, value) {
+                                            if(key == (index+1))
+                                            {
+                                              cartmap?.remove(key);
+                                            }
+                                          });
+                                        });
+
                                       },
-                                    ),
-                                    onTap: (){},
-                                  ),
-                                  onDismissed: (direction)async{
-                                    await perform?.database?.remove_cart(
-                                        cartmap?["${index+1}"],cartmap?["${index+1}"]["qty"]);
-
-                                    setState((){
-                                      cartmap?.forEach((key, value) {
-                                        if(key == (index+1))
-                                        {
-                                          cartmap?.remove(key);
-                                        }
-                                      });
-                                    });
-
+                                    );
                                   },
-                                );
-                              },
-                              itemCount: len,
-                            ),
-                          );
-                        }
-                        else
-                          {
-                            child = Container(
-                              child: Text("No products in Cart"),
-                            );
-                          }
-                      }
-                    }
-                    else {
-                      child = Loading();
-                    }
-                    return AnimatedSwitcher(
-                      duration: Duration(seconds: 1),
-                      child: child,
-                    );
-                  },
-                ),
-              ),
-              FutureBuilder<Map>(
-                  future: perform?.addToCartWidget(),
-                  builder: (context , snapshot){
-                    if(snapshot.connectionState == ConnectionState.done)
-                      {
-                        if(snapshot.hasError)
-                          {
-                            return price(context);
-                          }
-                        else
-                          {
-                            Map<String,dynamic> temp= Map();
-                            Map? priceholder = snapshot.data;
-                            if(priceholder!["1"]!= null) {
-                              int i = 1;
-                              flag = false;
-                              priceholder.forEach((key, value) {
-                                pay = pay+ value["price"]* value["qty"];
-                              });
-
-                              priceholder.forEach((key,value){
-                                temp["${i}"]= value;
-                                i++;
-                              });
+                                  itemCount: len,
+                                ),
+                              );
                             }
-                            return Container(
-                              child: Stack(
-                                children: <Widget>[
-                                  Opacity(
-                                    opacity: _sizeAnimate.value/100,
-                                    child: Container(
-                                      child: ElevatedButton(
-                                        onPressed: (!flag)?()async{
-                                          await _controller.forward();
-                                          await perform?.database?.buy(temp);
-                                          await perform?.database?.usercart.doc(uid).delete();
-                                          Navigator.popUntil(context,ModalRoute.withName('home'));
-                                          Navigator.pushNamed(context,'Orders');
-                                        }:null,
-                                        child: Text("Proceed to pay ${pay.toInt()}",style: TextStyle(fontSize: _sizeAnimate.value/5),),
-                                      ),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Opacity(
-                                      opacity: _sizeAnimate2.value/100,
-                                      child: Container(
-                                        height: _sizeAnimate2.value/2,
-                                        width: _sizeAnimate2.value/2,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: _sizeAnimate2.value/18,
+                            else
+                              {
+                                child = Container(
+                                  child: Text("No products in Cart"),
+                                );
+                              }
+                          }
+                        }
+                        else {
+                          child = Loading();
+                        }
+                        return AnimatedSwitcher(
+                          duration: Duration(seconds: 1),
+                          child: child,
+                        );
+                      },
+                    ),
+                  ),
+                  FutureBuilder<Map>(
+                      future: perform?.addToCartWidget(),
+                      builder: (context , snapshot){
+                        if(snapshot.connectionState == ConnectionState.done)
+                          {
+                            if(snapshot.hasError)
+                              {
+                                return price(context);
+                              }
+                            else
+                              {
+                                Map<String,dynamic> temp= Map();
+                                Map? priceholder = snapshot.data;
+                                if(priceholder!["1"]!= null) {
+                                  int i = 1;
+                                  flag = false;
+                                  priceholder.forEach((key, value) {
+                                    pay = pay+ value["price"]* value["qty"];
+                                  });
+
+                                  priceholder.forEach((key,value){
+                                    temp["${i}"]= value;
+                                    i++;
+                                  });
+                                }
+                                return Container(
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Opacity(
+                                        opacity: _sizeAnimate.value/100,
+                                        child: Container(
+                                          child: ElevatedButton(
+                                            onPressed: (!flag)?()async{
+                                              await _controller.forward();
+                                              await perform?.database?.buy(temp);
+                                              await perform?.database?.usercart.doc(uid).delete();
+                                              Navigator.popUntil(context,ModalRoute.withName('home'));
+                                              Navigator.pushNamed(context,'Orders');
+                                            }:null,
+                                            child: Text("Proceed to pay ${pay.toInt()}",style: TextStyle(fontSize: _sizeAnimate.value/5),),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      Center(
+                                        child: Opacity(
+                                          opacity: _sizeAnimate2.value/100,
+                                          child: Container(
+                                            height: _sizeAnimate2.value/2,
+                                            width: _sizeAnimate2.value/2,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: _sizeAnimate2.value/18,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                          );
-                        }
+                              );
+                            }
+                          }
+                        else
+                          {
+                            return CircularProgressIndicator();
+                          }
                       }
-                    else
-                      {
-                        return CircularProgressIndicator();
-                      }
-                  }
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

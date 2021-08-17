@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_flutter/Firebase/Authentication.dart';
 import 'package:firebase_flutter/Itemholder/Items.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,11 +22,11 @@ class _GridState extends State<Grid> with SingleTickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration:Duration(milliseconds: 1200),
+    _controller = AnimationController(duration:Duration(milliseconds: 800),
         vsync: this);
     _sizeAnimate = TweenSequence(
         <TweenSequenceItem<double>>[
-          TweenSequenceItem<double>(tween:Tween<double>(begin: 150,end: 8),weight:100),
+          TweenSequenceItem<double>(tween:Tween<double>(begin: 270,end: 8),weight:100),
         ]
     ).animate(_controller);
     _controller.addListener(() {
@@ -42,6 +43,7 @@ class _GridState extends State<Grid> with SingleTickerProviderStateMixin{
     _controller.forward();
     var productmap = ModalRoute.of(context)?.settings.arguments as Map;
     int axes =2;
+    String? uid = Provider.of<User?>(context,listen:false)?.uid;
     final mediaQuery = MediaQuery.of(context);
     double height = mediaQuery.size.height;
     double width =mediaQuery.size.width;
@@ -112,34 +114,38 @@ class _GridState extends State<Grid> with SingleTickerProviderStateMixin{
                   Navigator.pushNamed(context, 'Orders');
                 },
               ),
-              ListTile(
+              (uid == "tkq0ZcOJawV8AUMTqWKBj5nMuf32")?ListTile(
                 title: const Text('Add Items'),
                 onTap: () {
                   Navigator.pushNamed(context, 'Add').then((value) => setState(() {}));
                 },
-              ),
-              ListTile(
+              ):Container(),
+              (uid == "tkq0ZcOJawV8AUMTqWKBj5nMuf32")?ListTile(
                 title: const Text('Remove Items'),
                 onTap: () {
                   Navigator.pushNamed(context, 'Remove').then((value) => setState(() {}));
                 },
-              ),
+              ):Container(),
             ],
           ),
         ),
         extendBodyBehindAppBar: true,
-        body: Padding(
-          padding: EdgeInsets.fromLTRB(3.0,_sizeAnimate.value,3.0,3.0),
-          child:
-        Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: GridView.count(
-                    crossAxisCount: axes,
-                    children : fetch(productmap , context),
-                  ),
+        body: Stack(
+          children: [
+            Container(height: height,child: Image.asset("assets/background.jpg",fit:BoxFit.fitHeight)),
+            Padding(
+              padding: EdgeInsets.fromLTRB(3.0,_sizeAnimate.value,3.0,3.0),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: GridView.count(
+                  crossAxisCount: axes,
+                  children : fetch(productmap , context),
                 ),
-        ),
-      );
+              ),
+          ),
+        ]
+      ),
+    );
   }
 
   void onSelected(BuildContext context, int item, Authenticate authclass) {
