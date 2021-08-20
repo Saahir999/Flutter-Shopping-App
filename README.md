@@ -9,7 +9,7 @@ For accessing data throughout a widget tree
 ->http package (to get data from fakestoreapi)  
 
 Features  
--> Fake admin priviledge account Pass@gmail.com ,password: Passerby  
+-> Admin priviledge account Pass@gmail.com ,password: Passerby  
 -> Admin can add new products or delete them  
 -> When a product is added it will be available to users on refreshing their screens  
 -> Adding product needs a image, price,name and description of the product.  
