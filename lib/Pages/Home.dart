@@ -52,15 +52,15 @@ class _HomeState extends State<Home> {
   {
     //Sign In
     print("username");
-    await Future.delayed(const Duration(seconds: 2), () {});
-      DocumentSnapshot? docsnap = await FirebaseFirestore.instance.collection(
-          "name").doc(Provider
-          .of<User?>(context, listen: false)
-          ?.uid).get();
-      Map ext = docsnap.data() as Map;
-      Provider
-          .of<Item>(context, listen: false)
-          .name = ext["name"];
+    DocumentSnapshot? docsnap = await FirebaseFirestore.instance.collection(
+        "name").doc(Provider
+        .of<User?>(context, listen: false)
+        ?.uid).get();
+    Map ext = docsnap.data() as Map;
+    Provider
+        .of<Item>(context, listen: false)
+        .name = ext["name"];
+    //await Future.delayed(const Duration(seconds: 2), () {});
   }
   int k=0;
   @override
@@ -119,37 +119,61 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
-          drawer: Drawer(
-            child:ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
+          drawer: FutureBuilder(
+            future: FirebaseFirestore.instance.collection(
+                "name").doc(Provider
+                .of<User?>(context, listen: false)
+                ?.uid).get(),
+            builder: (context,snapshot) {
+              Widget child;
+              if(snapshot.hasData) {
+                Map? ext = (snapshot.data! as DocumentSnapshot?)!.data() as Map?;
+                Provider
+                    .of<Item>(context, listen: false)
+                    .name = ext?["name"];
+                child = Drawer(
+                  child: ListView(
+                    // Important: Remove any padding from the ListView.
+                    padding: EdgeInsets.zero,
+                    children: [
+                      DrawerHeader(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                        ),
+                        child: Text("Welcome,${Provider
+                            .of<Item>(context, listen: false)
+                            .name}", style: TextStyle(fontSize: 18),),
+                      ),
+                      ListTile(
+                        title: const Text('Your Order'),
+                        onTap: () {
+                          Navigator.pushNamed(context, 'Orders');
+                        },
+                      ),
+                      (uid == "tkq0ZcOJawV8AUMTqWKBj5nMuf32") ? ListTile(
+                        title: const Text('Add Items'),
+                        onTap: () {
+                          Navigator.pushNamed(context, 'Add').then((value) =>
+                              setState(() {}));
+                        },
+                      ) : Container(),
+                      (uid == "tkq0ZcOJawV8AUMTqWKBj5nMuf32") ? ListTile(
+                        title: const Text('Remove Items'),
+                        onTap: () {
+                          Navigator.pushNamed(context, 'Remove').then((value) =>
+                              setState(() {}));
+                        },
+                      ) : Container(),
+                    ],
                   ),
-                  child:  Text("Welcome,${Provider.of<Item>(context,listen:false).name}",style: TextStyle(fontSize: 18),),
-                ),
-                ListTile(
-                  title: const Text('Your Order'),
-                  onTap: () {
-                    Navigator.pushNamed(context, 'Orders');
-                  },
-                ),
-                (uid == "tkq0ZcOJawV8AUMTqWKBj5nMuf32")?ListTile(
-                  title: const Text('Add Items'),
-                  onTap: () {
-                    Navigator.pushNamed(context, 'Add').then((value) => setState(() {}));
-                  },
-                ):Container(),
-                (uid == "tkq0ZcOJawV8AUMTqWKBj5nMuf32")?ListTile(
-                  title: const Text('Remove Items'),
-                  onTap: () {
-                    Navigator.pushNamed(context, 'Remove').then((value) => setState(() {}));
-                  },
-                ):Container(),
-              ],
-            ),
+                );
+              }
+              else
+                {
+                  child = CircularProgressIndicator();
+                }
+              return AnimatedSwitcher(duration: Duration(milliseconds: 300),child:child);
+            }
           ),
           body: Stack(
             children: [

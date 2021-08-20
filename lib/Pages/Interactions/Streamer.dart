@@ -57,9 +57,7 @@ class _StreamerState extends State<Streamer> {
                               if (docsnap.exists) {
                                 bool flag = false;
                                 Map? rev = docsnap.data() as Map?;
-                                print(rev);
-                                print(docsnap.id);
-                                print("google.com");
+
                                 return SizedBox(
                                   height: 400,
                                   child: ListView.builder(

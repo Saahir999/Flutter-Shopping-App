@@ -158,11 +158,8 @@ class _GridState extends State<Grid> with SingleTickerProviderStateMixin{
         break;
       case 2:
         Provider.of<Item>(context,listen: false).name="";
-        if(Provider.of<Item>(context,listen: false).googleName != "")
-        {
-          Provider.of<Item>(context,listen: false).googleName = "";
-          authclass.signOutWithGoogle();
-        }
+        Provider.of<Item>(context,listen: false).googleName = "";
+        authclass.signOutWithGoogle();
         authclass.signOut();
         break;
     }

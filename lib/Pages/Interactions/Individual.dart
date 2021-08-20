@@ -222,6 +222,9 @@ class _IndividualState extends State<Individual> {
       //???
         break;
       case 2:
+        Provider.of<Item>(context,listen: false).name="";
+        Provider.of<Item>(context,listen: false).googleName = "";
+        authclass.signOutWithGoogle();
         authclass.signOut();
         break;
     }
