@@ -1,3 +1,3 @@
 # Flutter-Shopping-App
 
-In progress..
+On Hold
