@@ -80,7 +80,7 @@ class _CartState extends State<Cart> with SingleTickerProviderStateMixin{
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Container(
-                    height: 500,
+                    height: height - 200,
                     child: FutureBuilder<Map?>(
                       future: perform?.addToCartWidget(),
                       builder: (context, snapshot) {
@@ -166,71 +166,74 @@ class _CartState extends State<Cart> with SingleTickerProviderStateMixin{
                       },
                     ),
                   ),
-                  FutureBuilder<Map>(
-                      future: perform?.addToCartWidget(),
-                      builder: (context , snapshot){
-                        if(snapshot.connectionState == ConnectionState.done)
-                          {
-                            if(snapshot.hasError)
-                              {
-                                return price(context);
-                              }
-                            else
-                              {
-                                Map<String,dynamic> temp= Map();
-                                Map? priceholder = snapshot.data;
-                                if(priceholder!["1"]!= null) {
-                                  int i = 1;
-                                  flag = false;
-                                  priceholder.forEach((key, value) {
-                                    pay = pay+ value["price"]* value["qty"];
-                                  });
-
-                                  priceholder.forEach((key,value){
-                                    temp["${i}"]= value;
-                                    i++;
-                                  });
+                  Container(
+                    height: 100,
+                    child: FutureBuilder<Map>(
+                        future: perform?.addToCartWidget(),
+                        builder: (context , snapshot){
+                          if(snapshot.connectionState == ConnectionState.done)
+                            {
+                              if(snapshot.hasError)
+                                {
+                                  return price(context);
                                 }
-                                return Container(
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Opacity(
-                                        opacity: _sizeAnimate.value/100,
-                                        child: Container(
-                                          child: ElevatedButton(
-                                            onPressed: (!flag)?()async{
-                                              await _controller.forward();
-                                              await perform?.database?.buy(temp);
-                                              await perform?.database?.usercart.doc(uid).delete();
-                                              Navigator.popUntil(context,ModalRoute.withName('home'));
-                                              Navigator.pushNamed(context,'Orders');
-                                            }:null,
-                                            child: Text("Proceed to pay ${pay.toInt()}",style: TextStyle(fontSize: _sizeAnimate.value/5),),
-                                          ),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Opacity(
-                                          opacity: _sizeAnimate2.value/100,
+                              else
+                                {
+                                  Map<String,dynamic> temp= Map();
+                                  Map? priceholder = snapshot.data;
+                                  if(priceholder!["1"]!= null) {
+                                    int i = 1;
+                                    flag = false;
+                                    priceholder.forEach((key, value) {
+                                      pay = pay+ value["price"]* value["qty"];
+                                    });
+
+                                    priceholder.forEach((key,value){
+                                      temp["${i}"]= value;
+                                      i++;
+                                    });
+                                  }
+                                  return Container(
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Opacity(
+                                          opacity: _sizeAnimate.value/100,
                                           child: Container(
-                                            height: _sizeAnimate2.value/2,
-                                            width: _sizeAnimate2.value/2,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: _sizeAnimate2.value/18,
+                                            child: ElevatedButton(
+                                              onPressed: (!flag)?()async{
+                                                await _controller.forward();
+                                                await perform?.database?.buy(temp);
+                                                await perform?.database?.usercart.doc(uid).delete();
+                                                Navigator.popUntil(context,ModalRoute.withName('home'));
+                                                Navigator.pushNamed(context,'Orders');
+                                              }:null,
+                                              child: Text("Proceed to pay ${pay.toInt()}",style: TextStyle(fontSize: _sizeAnimate.value/5),),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                              );
+                                        Center(
+                                          child: Opacity(
+                                            opacity: _sizeAnimate2.value/100,
+                                            child: Container(
+                                              height: _sizeAnimate2.value/2,
+                                              width: _sizeAnimate2.value/2,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: _sizeAnimate2.value/18,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                );
+                              }
                             }
-                          }
-                        else
-                          {
-                            return CircularProgressIndicator();
-                          }
-                      }
+                          else
+                            {
+                              return CircularProgressIndicator();
+                            }
+                        }
+                    ),
                   ),
                 ],
               ),

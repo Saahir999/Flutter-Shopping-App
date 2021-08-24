@@ -21,6 +21,7 @@ class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Authenticate authclass = Authenticate();
   double height =100.0;
+  double width = 100.0;
 
   @override
   void initState() {
@@ -67,6 +68,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     height = mediaQuery.size.height;
+    width = mediaQuery.size.width;
     if(k<1){username(context); k++;setState((){});}
     String? uid =  Provider.of<User?>(context,listen:false)?.uid;
     Item perform = Item.setfirebase(uid:uid);
@@ -177,7 +179,7 @@ class _HomeState extends State<Home> {
           ),
           body: Stack(
             children: [
-              Container(height: height,child: Image.asset("assets/bg2.jpg",fit:BoxFit.fitHeight)),
+              Container(height: height,width: width,child: Image.asset("assets/bg2.jpg",fit:BoxFit.fill)),
               FutureBuilder<Map>(
                   future: perform.products(),
                   builder: (context, snapshot) {
